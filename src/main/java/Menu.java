@@ -22,6 +22,7 @@ public class Menu {
             System.out.println("2. Wyświetl kontakt");
             System.out.println("3. Wyświetl wszystkie pozycje");
             System.out.println("4. Wyświetl książki wydane przed 2000 rokiem");
+            System.out.println("5. To co wyżej tylko za pomocą for'a");
 
             int a = scanner.nextInt();
             switch (a){
@@ -40,6 +41,9 @@ public class Menu {
                     break;
                 case 4:
                     showBookBeforeYear();
+                    break;
+                case 5:
+                    showBookUsingFor();
                     break;
                 default:
                     System.out.println("Nie istnieje taka komenda, wybierz ponownie");
@@ -76,4 +80,18 @@ public class Menu {
                 .filter(book -> book.getRok() < i).collect(Collectors.toList());
         System.out.println(collect);
     }
+
+    private static void showBookUsingFor(){
+        BookData instance = BookData.getInstance();
+        List<Book> list = new ArrayList<>(instance.getAllBooks());
+        for (Book book : list) {
+            if (book.getRok() < 2005){
+                System.out.println(book);
+            }
+        }
+    }
+
+
+
+
 }
