@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -38,13 +40,25 @@ public class Menu {
         } return;
     }
     private static void importCsv() {
+        List<Book> list = new ArrayList();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("books.csv")));
         try {
             for (int i = 0; i < 6; i++) {
-                System.out.println(bufferedReader.readLine());
+                String[] split = bufferedReader.readLine().split(";");
+                Book book = new Book();
+                book.setName(split[0]);
+                book.setNumer(Long.parseLong(split[1]));
+                book.setRok(Integer.parseInt(split[2]));
+                list.add(book);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        showBooks(list);
+    }
+
+    static void showBooks(List<Book> books) {
+        System.out.println(books);
     }
 }
