@@ -30,7 +30,7 @@ public class Book {
 
     @Override
     public String toString() {
-        return "\n Tytuł: " + name + '\'' +
+        return "\n Tytuł: " + name +
                 "\n Rok: " + rok +
                 ", Numer: " + numer;
     }
