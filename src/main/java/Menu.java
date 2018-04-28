@@ -4,10 +4,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Menu {
 
     public static void main(String[] args) {
+        importCsv();
         menuKsiegarni();
     }
 
@@ -17,7 +20,8 @@ public class Menu {
             System.out.println("Co chcesz zrobić?");
             System.out.println("1. Wyjdź z menu");
             System.out.println("2. Wyświetl kontakt");
-            System.out.println("3. Wyświetl pozycje");
+            System.out.println("3. Wyświetl wszystkie pozycje");
+            System.out.println("4. Wyświetl książki wydane przed 2000 rokiem");
 
             int a = scanner.nextInt();
             switch (a){
@@ -31,7 +35,11 @@ public class Menu {
                     System.out.println("E-mail: ksiegarnia@ksiazki.com");
                     break;
                 case 3:
-                    importCsv();
+                    BookData instance = BookData.getInstance();
+                    System.out.println(instance.getAllBooks());
+                    break;
+                case 4:
+                    showBookBeforeYear();
                     break;
                 default:
                     System.out.println("Nie istnieje taka komenda, wybierz ponownie");
@@ -43,22 +51,29 @@ public class Menu {
         List<Book> list = new ArrayList();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream("books.csv")));
         try {
-            for (int i = 0; i < 6; i++) {
-                String[] split = bufferedReader.readLine().split(";");
+            String line = bufferedReader.readLine();
+            while (line != null) {
+                String[] split = line.split(";");
                 Book book = new Book();
                 book.setName(split[0]);
                 book.setNumer(Long.parseLong(split[1]));
                 book.setRok(Integer.parseInt(split[2]));
                 list.add(book);
+                line = bufferedReader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        showBooks(list);
+        BookData instance = BookData.getInstance();
+        instance.setBooks(list);
     }
-
-    static void showBooks(List<Book> books) {
-        System.out.println(books);
+    private static void showBookBeforeYear(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Podaj rok przed którym chcesz wyświetlić pozycje");
+        int i = scanner.nextInt();
+        BookData instance = BookData.getInstance();
+        List<Book> collect = instance.getAllBooks().stream()
+                .filter(book -> book.getRok() < i).collect(Collectors.toList());
+        System.out.println(collect);
     }
 }
