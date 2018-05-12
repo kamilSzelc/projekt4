@@ -82,8 +82,6 @@ public class BookFunction {
                 }
             }
         }
-
-
         return authorBook;
     }
 
@@ -92,6 +90,7 @@ public class BookFunction {
         String a =  scanner.nextLine();
         return books.stream().filter(book -> book.getName().contentEquals(a)).collect(Collectors.toList());
     }
+
 
 //    public List<Book> showChosenAuthorByStream(List<Book> books){
 //        List<Book> authorBook = new ArrayList<>();

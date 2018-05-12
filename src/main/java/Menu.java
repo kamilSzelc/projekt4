@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -10,13 +6,15 @@ import java.util.stream.Collectors;
 
 public class Menu {
     static BooksPrintStrategy booksPrintStrategy = new YearFirstBooksPrintStrategyImpl();
-
     static BookFunction booksFunction = new BookFunction();
+    static ImportCsv importCsv = new ImportCsv();
+    static ImportAuthors importAuthors = new ImportAuthors();
+    static ImportCategories importCategories = new ImportCategories();
 
     public static void main(String[] args) {
-        importAuthorsFromData2();
-        importCategoriesFromData2();
-        importCsv();
+        importAuthors.importAuthorsFromData2();
+        importCategories.importCategoriesFromData2();
+        importCsv.importCsv();
         libraryMenu();
     }
 
@@ -128,99 +126,6 @@ public class Menu {
         return;
     }
 
-
-    private static void importCsv() {
-
-        List<Book> list = new ArrayList();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(ClassLoader
-                .getSystemResourceAsStream("books.csv")));
-        try {
-            String line = bufferedReader.readLine();
-            while (line != null) {
-                String[] split = line.split(";");
-                Book book = new Book("raz","dwa", 3);
-                book.setName(split[0]);
-                book.setNumer(split[1]);
-                book.setRok(Integer.parseInt(split[2]));
-                book.setCoverType(split[3]);
-
-                List<Author> pomocniczaZmiennaAutorów = new ArrayList<>();
-                String[] splitAutor = split[4].split(",");
-                for (String authorID:splitAutor) {
-                        pomocniczaZmiennaAutorów.add(getAuthorByID(authorID));
-                }
-                book.setAuthorList(pomocniczaZmiennaAutorów);
-
-                Category pomocniczaZmiennaKategorii = null;
-                List<Category> categoriesList = CategoriesData.getInstance().getAllCategories();
-                for (Category category:categoriesList) {
-                    if (Integer.parseInt(split[5])==category.getNumber()){
-                        pomocniczaZmiennaKategorii=category;
-                    }
-                }
-                book.setCategory(pomocniczaZmiennaKategorii);
-
-                list.add(book);
-                line = bufferedReader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        BookData instance = BookData.getInstance();
-        instance.setBooks(list);
-    }
-
-   private static Author getAuthorByID (String id){
-       List<Author> authorList = AuthorData.getInstance().getAllAuthors();
-       return authorList.stream().filter(author -> author.getNumber()==Integer.parseInt(id)).findFirst().get();
-   }
-
-
-    private static void importAuthorsFromData2(){
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(ClassLoader
-                .getSystemResourceAsStream("authors.csv")));
-        List<Author> authorList = new ArrayList<>();
-        try {
-            String line = bufferedReader.readLine();
-            while (line != null) {
-                String[] split = line.split(";");
-                Author author = new Author();
-                author.setNumber(Integer.parseInt(split[0]));
-                author.setName(split[1]);
-                author.setYear(Integer.parseInt(split[2]));
-                authorList.add(author);
-                line = bufferedReader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        AuthorData autInstance = AuthorData.getInstance();
-        autInstance.setAuthors(authorList);
-    }
-
-    private static void importCategoriesFromData2(){
-        List<Category> categoryList = new ArrayList<>();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(ClassLoader
-                .getSystemResourceAsStream("categories.csv")));
-        try {
-            String line = bufferedReader.readLine();
-            while (line != null) {
-                String[] split = line.split(";");
-                Category category = new Category();
-                category.setNumber(Integer.parseInt(split[0]));
-                category.setName(split[1]);
-                category.setPriority(Integer.parseInt(split[2]));
-                categoryList.add(category);
-                line = bufferedReader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        CategoriesData catInstance = CategoriesData.getInstance();
-        catInstance.setCategories(categoryList);
-    }
-
-
     private static void showBookBeforeYear(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Podaj rok przed którym chcesz wyświetlić pozycje");
@@ -303,5 +208,4 @@ public class Menu {
             System.out.println("Mail do księgarni: zamówienie ksiązki z twardą oprawą");
         }
     }
-
 }
