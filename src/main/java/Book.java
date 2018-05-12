@@ -1,8 +1,21 @@
+import java.util.List;
+
 public class Book {
 
     private String name;
     private int rok;
-    private long numer;
+    private String numer;
+    private String coverType;
+
+    private List<Author> authorList;
+    private Category category;
+
+
+    public Book(String name, String numer, int rok) {
+        this.name = name;
+        this.rok = rok;
+        this.numer = numer;
+    }
 
     public String getName() {
         return name;
@@ -20,12 +33,36 @@ public class Book {
         this.rok = rok;
     }
 
-    public long getNumer() {
+    public String getNumer() {
         return numer;
     }
 
-    public void setNumer(long numer) {
+    public void setNumer(String numer) {
         this.numer = numer;
+    }
+
+    public List<Author> getAuthorList() {
+        return authorList;
+    }
+
+    public void setAuthorList(List<Author> authorList) {
+        this.authorList = authorList;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public String getCoverType() {
+        return coverType;
+    }
+
+    public void setCoverType(String coverType) {
+        this.coverType = coverType;
     }
 
     @Override
